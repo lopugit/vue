@@ -1,5 +1,5 @@
 'use strict';
-
+var flatted = require('flatted')
 module.exports = function weexFactory (exports, document) {
 
 /*  */
@@ -4538,7 +4538,7 @@ function _createElement (
 ) {
   if (isDef(data) && isDef((data).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
-      "Avoid using observed data object as vnode data: " + (JSON.stringify(data)) + "\n" +
+      "Avoid using observed data object as vnode data: " + (flatted.stringify(data)) + "\n" +
       'Always create fresh vnode data objects in each render!',
       context
     );

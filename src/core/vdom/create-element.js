@@ -4,7 +4,7 @@ import config from '../config'
 import VNode, { createEmptyVNode } from './vnode'
 import { createComponent } from './create-component'
 import { traverse } from '../observer/traverse'
-
+var flatted = require('flatted')
 import {
   warn,
   isDef,
@@ -53,7 +53,7 @@ export function _createElement (
 ): VNode | Array<VNode> {
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
-      `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
+      `Avoid using observed data object as vnode data: ${flatted.stringify(data)}\n` +
       'Always create fresh vnode data objects in each render!',
       context
     )

@@ -1,6 +1,6 @@
 {
   "name": "vue9",
-  "version": "9.6.9",
+  "version": "9.6.7",
   "description": "Reactive, component-oriented view layer for modern web interfaces.",
   "main": "dist/vue.runtime.common.js",
   "module": "dist/vue.runtime.esm.js",
