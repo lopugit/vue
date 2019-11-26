@@ -759,6 +759,22 @@ describe('Component scoped slot', () => {
         }).$mount()
         expect(`Unexpected mixed usage of different slot syntaxes`).toHaveBeenWarned()
       })
+
+      it('should warn invalid parameter expression', () => {
+        new Vue({
+          template: `<foo ${syntax}="1"></foo>`,
+          components: { Foo }
+        }).$mount();
+        expect('invalid function parameter expression').toHaveBeenWarned()
+      })
+
+      it('should allow destructuring props with default value', () => {
+        new Vue({
+          template: `<foo ${syntax}="{ foo = { bar: '1' } }"></foo>`,
+          components: { Foo }
+        }).$mount();
+        expect('invalid function parameter expression').not.toHaveBeenWarned()
+      })
     }
 
     // run tests for both full syntax and shorthand
@@ -1225,6 +1241,88 @@ describe('Component scoped slot', () => {
     vm.ok = false
     waitForUpdate(() => {
       expect(vm.$el.textContent.trim()).toBe(`2`)
+    }).then(done)
+  })
+
+  // #9644
+  it('should factor presence of normal slots into scoped slots caching', done => {
+    const Wrapper = {
+      template: `<div>
+        <p>Default:<slot/></p>
+        <p>Content:<slot name='content'/></p>
+      </div>`
+    }
+
+    const vm = new Vue({
+      data: { ok: false },
+      components: { Wrapper },
+      template: `<wrapper>
+        <p v-if='ok'>ok</p>
+        <template #content>
+          <p v-if='ok'>ok</p>
+        </template>
+      </wrapper>`
+    }).$mount()
+
+    expect(vm.$el.textContent).not.toMatch(`Default:ok`)
+    expect(vm.$el.textContent).not.toMatch(`Content:ok`)
+    vm.ok = true
+    waitForUpdate(() => {
+      expect(vm.$el.textContent).toMatch(`Default:ok`)
+      expect(vm.$el.textContent).toMatch(`Content:ok`)
+      vm.ok = false
+    }).then(() => {
+      expect(vm.$el.textContent).not.toMatch(`Default:ok`)
+      expect(vm.$el.textContent).not.toMatch(`Content:ok`)
+      vm.ok = true
+    }).then(() => {
+      expect(vm.$el.textContent).toMatch(`Default:ok`)
+      expect(vm.$el.textContent).toMatch(`Content:ok`)
+    }).then(done)
+  })
+
+  //#9658
+  it('fallback for scoped slot with single v-if', () => {
+    const vm = new Vue({
+      template: `<test v-slot><template v-if="false">hi</template></test>`,
+      components: {
+        Test: {
+          template: `<div><slot>fallback</slot></div>`
+        }
+      }
+    }).$mount()
+    expect(vm.$el.textContent).toMatch('fallback')
+  })
+
+  // #9699
+  // Component only has normal slots, but is passing down $scopedSlots directly
+  // $scopedSlots should not be marked as stable in this case
+  it('render function passing $scopedSlots w/ normal slots down', done => {
+    const one = {
+      template: `<div><slot name="footer"/></div>`
+    }
+
+    const two = {
+      render(h) {
+        return h(one, {
+          scopedSlots: this.$scopedSlots
+        })
+      }
+    }
+
+    const vm = new Vue({
+      data: { count: 0 },
+      render(h) {
+        return h(two, [
+          h('span', { slot: 'footer' }, this.count)
+        ])
+      }
+    }).$mount()
+
+    expect(vm.$el.textContent).toMatch(`0`)
+    vm.count++
+    waitForUpdate(() => {
+      expect(vm.$el.textContent).toMatch(`1`)
     }).then(done)
   })
 })
