@@ -108,7 +108,9 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * or the existing observer if the value already has one.
  */
 export function observe (value: any, asRootData: ?boolean): Observer | void {
-  if (!isObject(value) || value instanceof VNode) {
+  if (!isObject(value) 
+		// || value instanceof VNode
+	) {
     return
   }
   let ob: Observer | void
@@ -118,8 +120,8 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     shouldObserve &&
     !isServerRendering() &&
     (Array.isArray(value) || isPlainObject(value)) &&
-    Object.isExtensible(value) &&
-    !value._isVue
+    Object.isExtensible(value) 
+		// && !value._isVue
   ) {
     ob = new Observer(value)
   }

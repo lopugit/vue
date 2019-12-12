@@ -18,6 +18,7 @@ export default class Dep {
   constructor () {
     this.id = uid++
     this.subs = []
+		this.addingDep = false
   }
 
   addSub (sub: Watcher) {

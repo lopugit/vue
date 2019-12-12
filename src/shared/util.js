@@ -56,7 +56,8 @@ export function toRawType (value: any): string {
  * for plain JavaScript objects.
  */
 export function isPlainObject (obj: any): boolean {
-  return _toString.call(obj) === '[object Object]'
+	return isObject(obj)
+  // return _toString.call(obj) === '[object Object]'
 }
 
 export function isRegExp (v: any): boolean {

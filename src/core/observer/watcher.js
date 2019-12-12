@@ -126,6 +126,7 @@ export default class Watcher {
    * Add a dependency to this directive.
    */
   addDep (dep: Dep) {
+		Dep.addingDep = true
     const id = dep.id
     if (!this.newDepIds.has(id)) {
       this.newDepIds.add(id)
@@ -134,6 +135,7 @@ export default class Watcher {
         dep.addSub(this)
       }
     }
+		Dep.addingDep = false
   }
 
   /**
