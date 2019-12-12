@@ -11,13 +11,13 @@ const seenThings = []
  * getters, so that every nested property inside the object
  * is collected as a "deep" dependency.
  */
-export function traverse (val: any, shallow: int) {
+export function traverse (val: any, shallow: boolean|int) {
   _traverse(val, seenObjects, shallow)
   seenObjects.clear()
 	seenThings.length = 0
 }
 
-function _traverse (val: any, seen: SimpleSet, shallow: int) {
+function _traverse (val: any, seen: SimpleSet, shallow: boolean|int) {
 	if(shallow != 2){
 		let i, keys
 		const isA = Array.isArray(val)

@@ -139,7 +139,7 @@ export function defineReactive (
   key: string,
   val: any,
   customSetter?: ?Function,
-  shallow?: boolean
+  shallow?: boolean|int
 ) {
   const dep = new Dep()
 
@@ -200,7 +200,7 @@ export function defineReactive (
  * triggers change notification if the property doesn't
  * already exist.
  */
-export function set (target: Array<any> | Object, key: any, val: any): any {
+export function set (target: Array<any> | Object, key: any, val: any, shallow: boolean|int): any {
   if (process.env.NODE_ENV !== 'production' &&
     (isUndef(target) || isPrimitive(target))
   ) {
@@ -216,18 +216,18 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
     return val
   }
   const ob = (target: any).__ob__
-  if (target._isVue || (ob && ob.vmCount)) {
-    process.env.NODE_ENV !== 'production' && warn(
-      'Avoid adding reactive properties to a Vue instance or its root $data ' +
-      'at runtime - declare it upfront in the data option.'
-    )
-    return val
-  }
+  // if (target._isVue || (ob && ob.vmCount)) {
+  //   process.env.NODE_ENV !== 'production' && warn(
+  //     'Avoid adding reactive properties to a Vue instance or its root $data ' +
+  //     'at runtime - declare it upfront in the data option.'
+  //   )
+  //   return val
+  // }
   if (!ob) {
     target[key] = val
     return val
   }
-  defineReactive(ob.value, key, val)
+  defineReactive(ob.value, key, val, shallow)
   ob.dep.notify()
   return val
 }
