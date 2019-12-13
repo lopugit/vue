@@ -1080,7 +1080,13 @@ function defineReactive (
  * triggers change notification if the property doesn't
  * already exist.
  */
-function set (target, key, val, shallow) {
+function set (
+	target, 
+	key, 
+	val, 
+	shallow, 
+	customSetter
+) {
   if (isUndef(target) || isPrimitive(target)
   ) {
     warn(("Cannot set reactive property on undefined, null, or primitive value: " + ((target))));
@@ -1106,7 +1112,7 @@ function set (target, key, val, shallow) {
     target[key] = val;
     return val
   }
-  defineReactive(ob.value, key, val, shallow);
+  defineReactive(ob.value, key, val, customSetter, shallow);
   ob.dep.notify();
   return val
 }
