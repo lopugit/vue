@@ -1298,7 +1298,10 @@
       configurable: true,
       get: function reactiveGetter () {
         var value = getter ? getter.call(obj) : val;
-        if (Dep.target) {
+        if (
+  				Dep.target
+  				&& !Dep.addingDep
+  			) {
           dep.depend();
           if (childOb) {
             childOb.dep.depend();
