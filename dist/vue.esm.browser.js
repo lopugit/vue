@@ -1121,6 +1121,11 @@ function set (
 	shallow, 
 	customSetter
 ) {
+	if(
+		(this && this.vue && this.vue.shallow) || 
+		(target && target.vue && target.vue.shallow)
+	) shallow = shallow || 1;
+
   if (isUndef(target) || isPrimitive(target)
   ) {
     warn(`Cannot set reactive property on undefined, null, or primitive value: ${(target)}`);
@@ -2169,6 +2174,10 @@ const seenThings = [];
  * is collected as a "deep" dependency.
  */
 function traverse (val, shallow) {
+	if(
+		(val && val.vue && val.vue.shallow)
+	) shallow = shallow || 1;
+
   _traverse(val, seenObjects, shallow);
   seenObjects.clear();
 	seenThings.length = 0;
