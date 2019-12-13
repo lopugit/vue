@@ -210,6 +210,11 @@ export function set (
 	shallow?: boolean|int, 
 	customSetter?: ?Function
 ): any {
+	if(
+		(this && this.vue && this.vue.shallow) || 
+		(target && target.vue && target.vue.shallow)
+	) shallow = shallow || 1
+
   if (process.env.NODE_ENV !== 'production' &&
     (isUndef(target) || isPrimitive(target))
   ) {

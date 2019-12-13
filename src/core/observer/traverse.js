@@ -12,6 +12,10 @@ const seenThings = []
  * is collected as a "deep" dependency.
  */
 export function traverse (val: any, shallow: boolean|int) {
+	if(
+		(val && val.vue && val.vue.shallow)
+	) shallow = shallow || 1
+
   _traverse(val, seenObjects, shallow)
   seenObjects.clear()
 	seenThings.length = 0
