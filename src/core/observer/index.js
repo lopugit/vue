@@ -203,7 +203,13 @@ export function defineReactive (
  * triggers change notification if the property doesn't
  * already exist.
  */
-export function set (target: Array<any> | Object, key: any, val: any, shallow: boolean|int): any {
+export function set (
+	target: Array<any> | Object, 
+	key: any, 
+	val: any, 
+	shallow?: boolean|int, 
+	customSetter?: ?Function
+): any {
   if (process.env.NODE_ENV !== 'production' &&
     (isUndef(target) || isPrimitive(target))
   ) {
@@ -230,7 +236,7 @@ export function set (target: Array<any> | Object, key: any, val: any, shallow: b
     target[key] = val
     return val
   }
-  defineReactive(ob.value, key, val, shallow)
+  defineReactive(ob.value, key, val, customSetter, shallow)
   ob.dep.notify()
   return val
 }
