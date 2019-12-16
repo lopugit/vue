@@ -2135,11 +2135,11 @@ function _traverse (val, seen, shallow) {
 		}
 		if (val.__ob__) {
 			var depId = val.__ob__.dep.id;
-			if (seen.has(depId)) {
+			if (seen.has(depId) || typeof depId == 'undefined') {
 				return
 			}
 			seen.add(depId);
-		} else if(isObject(val)){
+		} else {
 			return
 		}
 		if (isA) {
