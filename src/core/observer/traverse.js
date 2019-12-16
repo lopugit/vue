@@ -32,11 +32,11 @@ function _traverse (val: any, seen: SimpleSet, shallow: boolean|int) {
 		}
 		if (val.__ob__) {
 			const depId = val.__ob__.dep.id
-			if (seen.has(depId)) {
+			if (seen.has(depId) || typeof depId == 'undefined') {
 				return
 			}
-			seen.add(depId)
-		} else if(isObject(val)){
+			seen.add(depId);
+		} else {
 			return
 		}
 		if (isA) {
