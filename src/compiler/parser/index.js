@@ -932,7 +932,7 @@ function isTextTag (el): boolean {
 }
 
 function isForbiddenTag (el): boolean {
-  return (
+  return false && (
     el.tag === 'style' ||
     (el.tag === 'script' && (
       !el.attrsMap.type ||

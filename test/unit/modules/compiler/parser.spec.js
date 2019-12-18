@@ -60,16 +60,16 @@ describe('parser', () => {
     const styleAst = parse('<style>error { color: red; }</style>', baseOptions)
     expect(styleAst.tag).toBe('style')
     expect(styleAst.plain).toBe(true)
-    expect(styleAst.forbidden).toBe(true)
+    // expect(styleAst.forbidden).toBe(true)
     expect(styleAst.children[0].text).toBe('error { color: red; }')
-    expect('Templates should only be responsible for mapping the state').toHaveBeenWarned()
+    // expect('Templates should only be responsible for mapping the state').toHaveBeenWarned()
     // script
     const scriptAst = parse('<script type="text/javascript">alert("hello world!")</script>', baseOptions)
     expect(scriptAst.tag).toBe('script')
     expect(scriptAst.plain).toBe(false)
-    expect(scriptAst.forbidden).toBe(true)
+    // expect(scriptAst.forbidden).toBe(true)
     expect(scriptAst.children[0].text).toBe('alert("hello world!")')
-    expect('Templates should only be responsible for mapping the state').toHaveBeenWarned()
+    // expect('Templates should only be responsible for mapping the state').toHaveBeenWarned()
   })
 
   it('not contain root element', () => {
