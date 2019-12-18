@@ -1719,7 +1719,7 @@ function isTextTag (el) {
 }
 
 function isForbiddenTag (el) {
-  return (
+  return false && (
     el.tag === 'style' ||
     (el.tag === 'script' && (
       !el.attrsMap.type ||

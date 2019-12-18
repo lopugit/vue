@@ -9822,16 +9822,6 @@ function parse (
         });
       }
 
-      if (isForbiddenTag(element) && !isServerRendering()) {
-        element.forbidden = true;
-        process.env.NODE_ENV !== 'production' && warn$2(
-          'Templates should only be responsible for mapping the state to the ' +
-          'UI. Avoid placing tags with side-effects in your templates, such as ' +
-          "<" + tag + ">" + ', as they will not be parsed.',
-          { start: element.start }
-        );
-      }
-
       // apply pre-transforms
       for (var i = 0; i < preTransforms.length; i++) {
         element = preTransforms[i](element, options) || element;
@@ -10498,16 +10488,6 @@ function makeAttrsMap (attrs) {
 // for script (e.g. type="x/template") or style, do not decode content
 function isTextTag (el) {
   return el.tag === 'script' || el.tag === 'style'
-}
-
-function isForbiddenTag (el) {
-  return (
-    el.tag === 'style' ||
-    (el.tag === 'script' && (
-      !el.attrsMap.type ||
-      el.attrsMap.type === 'text/javascript'
-    ))
-  )
 }
 
 var ieNSBug = /^xmlns:NS\d+/;
