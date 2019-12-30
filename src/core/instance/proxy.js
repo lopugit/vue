@@ -38,16 +38,16 @@ if (process.env.NODE_ENV !== 'production') {
     typeof Proxy !== 'undefined' && isNative(Proxy)
 
   if (hasProxy) {
-    const isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact')
+    // const isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact')
     config.keyCodes = new Proxy(config.keyCodes, {
       set (target, key, value) {
-        if (isBuiltInModifier(key)) {
-          warn(`Avoid overwriting built-in modifier in config.keyCodes: .${key}`)
-          return false
-        } else {
+        // if (isBuiltInModifier(key)) {
+        //   warn(`Avoid overwriting built-in modifier in config.keyCodes: .${key}`)
+        //   return false
+        // } else {
           target[key] = value
           return true
-        }
+        // }
       }
     })
   }
@@ -55,22 +55,25 @@ if (process.env.NODE_ENV !== 'production') {
   const hasHandler = {
     has (target, key) {
       const has = key in target
-      const isAllowed = allowedGlobals(key) ||
-        (typeof key === 'string' && key.charAt(0) === '_' && !(key in target.$data))
-      if (!has && !isAllowed) {
-        if (key in target.$data) warnReservedPrefix(target, key)
-        else warnNonPresent(target, key)
-      }
-      return has || !isAllowed
+      const isAllowed = allowedGlobals(key) 
+				// || (
+				// 	typeof key === 'string' && key.charAt(0) === '_' 
+				// 	&& !(key in target.$data)
+				// )
+      // if (!has && !isAllowed) {
+      //   if (key in target.$data) warnReservedPrefix(target, key)
+      //   else warnNonPresent(target, key)
+      // }
+      return has || isAllowed
     }
   }
 
   const getHandler = {
     get (target, key) {
-      if (typeof key === 'string' && !(key in target)) {
-        if (key in target.$data) warnReservedPrefix(target, key)
-        else warnNonPresent(target, key)
-      }
+      // if (typeof key === 'string' && !(key in target)) {
+      //   if (key in target.$data) warnReservedPrefix(target, key)
+      //   else warnNonPresent(target, key)
+      // }
       return target[key]
     }
   }
