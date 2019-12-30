@@ -6596,16 +6596,16 @@ function renderSSRStyle (
     typeof Proxy !== 'undefined' && isNative(Proxy);
 
   if (hasProxy) {
-    var isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact');
+    // const isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact')
     config.keyCodes = new Proxy(config.keyCodes, {
       set: function set (target, key, value) {
-        if (isBuiltInModifier(key)) {
-          warn(("Avoid overwriting built-in modifier in config.keyCodes: ." + key));
-          return false
-        } else {
+        // if (isBuiltInModifier(key)) {
+        //   warn(`Avoid overwriting built-in modifier in config.keyCodes: .${key}`)
+        //   return false
+        // } else {
           target[key] = value;
           return true
-        }
+        // }
       }
     });
   }

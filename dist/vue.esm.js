@@ -2061,41 +2061,20 @@ if (process.env.NODE_ENV !== 'production') {
     'require' // for Webpack/Browserify
   );
 
-  var warnNonPresent = function (target, key) {
-    warn(
-      "Property or method \"" + key + "\" is not defined on the instance but " +
-      'referenced during render. Make sure that this property is reactive, ' +
-      'either in the data option, or for class-based components, by ' +
-      'initializing the property. ' +
-      'See: https://vuejs.org/v2/guide/reactivity.html#Declaring-Reactive-Properties.',
-      target
-    );
-  };
-
-  var warnReservedPrefix = function (target, key) {
-    warn(
-      "Property \"" + key + "\" must be accessed with \"$data." + key + "\" because " +
-      'properties starting with "$" or "_" are not proxied in the Vue instance to ' +
-      'prevent conflicts with Vue internals. ' +
-      'See: https://vuejs.org/v2/api/#data',
-      target
-    );
-  };
-
   var hasProxy =
     typeof Proxy !== 'undefined' && isNative(Proxy);
 
   if (hasProxy) {
-    var isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact');
+    // const isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact')
     config.keyCodes = new Proxy(config.keyCodes, {
       set: function set (target, key, value) {
-        if (isBuiltInModifier(key)) {
-          warn(("Avoid overwriting built-in modifier in config.keyCodes: ." + key));
-          return false
-        } else {
+        // if (isBuiltInModifier(key)) {
+        //   warn(`Avoid overwriting built-in modifier in config.keyCodes: .${key}`)
+        //   return false
+        // } else {
           target[key] = value;
           return true
-        }
+        // }
       }
     });
   }
@@ -2103,22 +2082,25 @@ if (process.env.NODE_ENV !== 'production') {
   var hasHandler = {
     has: function has (target, key) {
       var has = key in target;
-      var isAllowed = allowedGlobals(key) ||
-        (typeof key === 'string' && key.charAt(0) === '_' && !(key in target.$data));
-      if (!has && !isAllowed) {
-        if (key in target.$data) { warnReservedPrefix(target, key); }
-        else { warnNonPresent(target, key); }
-      }
-      return has || !isAllowed
+      var isAllowed = allowedGlobals(key); 
+				// || (
+				// 	typeof key === 'string' && key.charAt(0) === '_' 
+				// 	&& !(key in target.$data)
+				// )
+      // if (!has && !isAllowed) {
+      //   if (key in target.$data) warnReservedPrefix(target, key)
+      //   else warnNonPresent(target, key)
+      // }
+      return has || isAllowed
     }
   };
 
   var getHandler = {
     get: function get (target, key) {
-      if (typeof key === 'string' && !(key in target)) {
-        if (key in target.$data) { warnReservedPrefix(target, key); }
-        else { warnNonPresent(target, key); }
-      }
+      // if (typeof key === 'string' && !(key in target)) {
+      //   if (key in target.$data) warnReservedPrefix(target, key)
+      //   else warnNonPresent(target, key)
+      // }
       return target[key]
     }
   };
