@@ -14,7 +14,8 @@ export default class Dep {
   static target: ?Watcher;
   id: number;
   subs: Array<Watcher>;
-
+	addingDep: Boolean;
+	
   constructor () {
     this.id = uid++
     this.subs = []

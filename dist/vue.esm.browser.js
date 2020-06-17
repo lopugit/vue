@@ -715,7 +715,8 @@ class Dep {
   
   
   
-
+	
+	
   constructor () {
     this.id = uid++;
     this.subs = [];
@@ -1139,7 +1140,7 @@ function set (
     target[key] = val;
     return val
   }
-  const ob = (target).__ob__;
+  let ob = (target).__ob__;
   // if (target._isVue || (ob && ob.vmCount)) {
   //   "development" !== 'production' && warn(
   //     'Avoid adding reactive properties to a Vue instance or its root $data ' +
@@ -1147,13 +1148,37 @@ function set (
   //   )
   //   return val
   // }
+
+	// do this only because observing vue instances breaks at the moment
+	// To-Do fix not being able to observe vue instances due to observing observers paradox
+	if(!ob && target._isVue){
+		let props = target.$options && target.$options.props;
+		let data = target.$options && target.$options.data;
+		let methods = target.$options && target.$options.methods;
+
+		let isData = data && hasOwn(data, key);
+		let isProp = props && hasOwn(props, key);
+		let isMethod = methods && hasOwn(methods, key);
+
+		if(isProp){
+			target = props;
+		} else if(isData){
+			target = data;
+		} else if(isMethod) {
+			target = methods;
+		}
+
+		ob = (target).__ob__;
+		
+	} 
   if (!ob) {
-    target[key] = val;
-    return val
+		target[key] = val;
+		return val
   }
-  defineReactive(ob.value, key, val, customSetter, shallow);
-  ob.dep.notify();
-  return val
+	
+	defineReactive(ob.value, key, val, customSetter, shallow);
+	ob.dep.notify();
+	return val
 }
 
 /**

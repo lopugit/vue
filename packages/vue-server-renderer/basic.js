@@ -1292,13 +1292,37 @@
     //   )
     //   return val
     // }
+
+  	// do this only because observing vue instances breaks at the moment
+  	// To-Do fix not being able to observe vue instances due to observing observers paradox
+  	if(!ob && target._isVue){
+  		var props = target.$options && target.$options.props;
+  		var data = target.$options && target.$options.data;
+  		var methods = target.$options && target.$options.methods;
+
+  		var isData = data && hasOwn(data, key);
+  		var isProp = props && hasOwn(props, key);
+  		var isMethod = methods && hasOwn(methods, key);
+
+  		if(isProp){
+  			target = props;
+  		} else if(isData){
+  			target = data;
+  		} else if(isMethod) {
+  			target = methods;
+  		}
+
+  		ob = (target).__ob__;
+  		
+  	} 
     if (!ob) {
-      target[key] = val;
-      return val
+  		target[key] = val;
+  		return val
     }
-    defineReactive(ob.value, key, val, customSetter, shallow);
-    ob.dep.notify();
-    return val
+  	
+  	defineReactive(ob.value, key, val, customSetter, shallow);
+  	ob.dep.notify();
+  	return val
   }
 
   /**

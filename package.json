@@ -41,7 +41,7 @@
     "release": "bash scripts/release.sh",
     "release:weex": "bash scripts/release-weex.sh",
     "release:note": "node scripts/gen-release-note.js",
-    "commit": "git add . ; git commit -m 'did I do that?'",
+    "commit": "git add . ; git commit -m 'Automatic commit'",
     "push": "git push",
     "togit": "npm run commit ; npm run push",
     "pull": "git pull",
@@ -67,9 +67,9 @@
     "url": "https://github.com/vuejs/vue/issues"
   },
   "homepage": "https://github.com/vuejs/vue#readme",
-	"dependencies": {
-		"flatted": "^2.0.0"
-	},
+  "dependencies": {
+    "flatted": "^2.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
