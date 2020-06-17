@@ -42,6 +42,7 @@
     "release:weex": "bash scripts/release-weex.sh",
     "release:note": "node scripts/gen-release-note.js",
     "commit": "git add . ; git commit -m 'Automatic commit'",
+		"everything": "npm run build && git add . && git commit -m 'new build' && git push",
     "push": "git push",
     "togit": "npm run commit ; npm run push",
     "pull": "git pull",

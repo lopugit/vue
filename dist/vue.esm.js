@@ -1130,6 +1130,8 @@ function set (
 			target = data;
 		} else if(isMethod) {
 			target = methods;
+		} else {
+			target = data;
 		}
 
 		ob = (target).__ob__;
@@ -1139,7 +1141,7 @@ function set (
 		target[key] = val;
 		return val
   }
-	
+
 	defineReactive(ob.value, key, val, customSetter, shallow);
 	ob.dep.notify();
 	return val
