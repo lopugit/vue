@@ -1117,11 +1117,16 @@ function set (
 	// To-Do fix not being able to observe vue instances due to observing observers paradox
 	if(!ob && target._isVue){
 		var props = target.$options && target.$options.props;
-		var data = target.$options && target.$options.data;
 		var methods = target.$options && target.$options.methods;
+		
+		var data = target.$options && target.$options.data;
+		data = target._data = typeof data === 'function'
+			? getData(data, target)
+			: data || {};
+			
 
-		var isData = data && hasOwn(data, key);
 		var isProp = props && hasOwn(props, key);
+		var isData = data && hasOwn(data, key);
 		var isMethod = methods && hasOwn(methods, key);
 
 		if(isProp){
@@ -4753,7 +4758,7 @@ function initProps (vm, propsOptions) {
 function initData (vm) {
   var data = vm.$options.data;
   data = vm._data = typeof data === 'function'
-    ? getData(data, vm)
+    ? getData$1(data, vm)
     : data || {};
   if (!isPlainObject(data)) {
     data = {};
@@ -4792,7 +4797,7 @@ function initData (vm) {
   observe(data, true /* asRootData */);
 }
 
-function getData (data, vm) {
+function getData$1 (data, vm) {
   // #7573 disable dep collection when invoking data getters
   pushTarget();
   try {

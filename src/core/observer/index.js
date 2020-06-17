@@ -242,11 +242,16 @@ export function set (
 	// To-Do fix not being able to observe vue instances due to observing observers paradox
 	if(!ob && target._isVue){
 		let props = target.$options && target.$options.props
-		let data = target.$options && target.$options.data
 		let methods = target.$options && target.$options.methods
+		
+		let data = target.$options && target.$options.data
+		data = target._data = typeof data === 'function'
+			? getData(data, target)
+			: data || {};
+			
 
-		let isData = data && hasOwn(data, key)
 		let isProp = props && hasOwn(props, key)
+		let isData = data && hasOwn(data, key)
 		let isMethod = methods && hasOwn(methods, key)
 
 		if(isProp){

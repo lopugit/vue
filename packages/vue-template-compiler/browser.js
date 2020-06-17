@@ -1378,11 +1378,16 @@
   	// To-Do fix not being able to observe vue instances due to observing observers paradox
   	if(!ob && target._isVue){
   		var props = target.$options && target.$options.props;
-  		var data = target.$options && target.$options.data;
   		var methods = target.$options && target.$options.methods;
+  		
+  		var data = target.$options && target.$options.data;
+  		data = target._data = typeof data === 'function'
+  			? getData(data, target)
+  			: data || {};
+  			
 
-  		var isData = data && hasOwn(data, key);
   		var isProp = props && hasOwn(props, key);
+  		var isData = data && hasOwn(data, key);
   		var isMethod = methods && hasOwn(methods, key);
 
   		if(isProp){
